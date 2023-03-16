@@ -9,9 +9,9 @@ Type: Website/mobile app
 Theme: UTOPIA
 
 Released by:
-  - ALLOUCHE Imène
-  - Aziz Aissa
-  - Akram Bedjaoui
+  - Imène ALLOUCHE
+  - Aziz AISSA
+  - Akram BEDJAOUI
   - Naila
   - Ninou
 
