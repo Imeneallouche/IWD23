@@ -25,11 +25,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'accounts.apps.AccountsConfig',
+    'chat.apps.ChatConfig',
+
     'corsheaders',
-    'chat'
-
-    'assistance.apps.AssistanceConfig',
-
     'rest_framework',
     'rest_framework.authtoken',
 ]
