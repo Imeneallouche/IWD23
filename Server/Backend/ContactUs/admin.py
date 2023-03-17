@@ -14,7 +14,7 @@ def contact_view(request):
                 email_message = EmailMessage(
                     subject='New Contact Us Message',
                     body=f'Name: {name}\nEmail: {email}\nFeedback: {feedback}',
-                    from_email='noreply@example.com',
+                    from_email=email,
                     to=['li_allouche@esi.dz'],
                 )
                 email_message.send()
