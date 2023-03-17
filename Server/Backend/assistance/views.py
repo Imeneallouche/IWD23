@@ -1,39 +1,38 @@
 from django.contrib.auth.models import User
 from rest_framework import generics
-from rest_framework import authentication
-from rest_framework import permissions
+from rest_framework import authentication, permissions , status
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
 from .models import Patient, Therapist
-from .serializers import PatientSerializer, TherapistSerializer, UserSerializer
+from .mixins import CreatUserRegisterMixin
+from .serializers import ( PatientSerializer, TherapistSerializer,
+                        UserSerializer, PatientRegisterSerializer, 
+                        TherapistRegisterSerializer )
 
 
 class UserListView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class PatientListView(generics.ListCreateAPIView):
+class PatientListView(generics.ListAPIView):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     
-    def perform_create(self, serializer):
-        username = self.request.data.get("username")
-        email = self.request.data.get("email")
-        password = self.request.data.get("password")
-        user = User.objects.create_user(username, email, password)
-        user.save()
-        serializer.save(user=user)
+
+class PatientRegisterView(CreatUserRegisterMixin, generics.CreateAPIView):
+    queryset = Patient.objects.all()
+    serializer_class = PatientRegisterSerializer
 
 
-        return super().perform_create(serializer)
+class TherapistRegisterView(CreatUserRegisterMixin, generics.CreateAPIView):
+    queryset = Patient.objects.all()
+    serializer_class = TherapistRegisterSerializer
 
-class TherapistListView(generics.ListCreateAPIView):
+class TherapistListView(generics.ListAPIView):
     queryset = Therapist.objects.all()
     serializer_class = TherapistSerializer
-
-    def perform_create(self, serializer):
-
-        return super().perform_create(serializer)
 
 
 
