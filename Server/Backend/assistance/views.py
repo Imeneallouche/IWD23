@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
-from rest_framework import generics, status
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
+from rest_framework import generics
+from rest_framework import authentication
+from rest_framework import permissions
 from .models import Patient, Therapist
 from .serializers import PatientSerializer, TherapistSerializer, UserSerializer
 
@@ -14,6 +13,8 @@ class UserListView(generics.ListCreateAPIView):
 class PatientListView(generics.ListCreateAPIView):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     
     def perform_create(self, serializer):
         username = self.request.data.get("username")
@@ -24,16 +25,7 @@ class PatientListView(generics.ListCreateAPIView):
         serializer.save(user=user)
 
 
-        authenticated_user = authenticate(username=username, password=password)
-        token, _ = Token.objects.get_or_create(user=authenticated_user)
-
-        # Login the user
-        login(self.request, authenticated_user)
-
-        # Return a response with the token
-        response_data = {'token': token.key}
-        print(response_data)
-        return Response(response_data, status=status.HTTP_201_CREATED)
+        return super().perform_create(serializer)
 
 class TherapistListView(generics.ListCreateAPIView):
     queryset = Therapist.objects.all()
