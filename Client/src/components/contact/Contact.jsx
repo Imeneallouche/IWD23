@@ -2,7 +2,6 @@ import location from "../../assets/imgs/location.png";
 import phone from "../../assets/imgs/phone.png";
 import email from "../../assets/imgs/email.png";
 import React, { useState } from "react";
-import { api } from "../../utils/api";
 
 const Contact = () => {
   const [name, setName] = useState("");

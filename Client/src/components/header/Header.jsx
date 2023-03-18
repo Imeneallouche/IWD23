@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import menu from "../../assets/imgs/menu.png";
 import close from "../../assets/imgs/close.png";
-<<<<<<< HEAD
+
 import { Link } from "react-router-dom";
-=======
->>>>>>> fa6d37df1c8e57468a5f557ff426989f91a66999
+
 
 const Header = () => {
   const [navToggle, setNavToggle] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
 
-<<<<<<< HEAD
  useEffect(() => {
    function handleScroll() {
      if (window.scrollY > 40) {
@@ -28,29 +26,11 @@ const Header = () => {
 
  
   return (
-    <header
-      className={`${
-        hasScrolled ? 'bg-blue-500' : ''
-=======
-  useEffect(() => {
-    function handleScroll() {
-      if (window.scrollY > 40) {
-        setHasScrolled(true);
-      } else {
-        setHasScrolled(false);
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-  return (
+    
     <header
       className={`${
         hasScrolled ? "bg-blue-400" : ""
->>>>>>> fa6d37df1c8e57468a5f557ff426989f91a66999
+
       } fixed w-full h-[60px] left-0 top-0  flex items-center justify-between bg-transparent px-5 md:px-10 md:py-5 z-10`}
     >
       <div className="logo">
@@ -61,6 +41,7 @@ const Header = () => {
           MindScape
         </a>
       </div>
+
       <div className="menu md:hidden w-[25px] cursor-pointer">
         <img
           src={navToggle ? close : menu}
@@ -71,8 +52,8 @@ const Header = () => {
           className={`${
             navToggle ? "top-[60px] && " : "-top-[100vh]"
           } navMenuPhone absolute w-screen min-h-[300px] bg-white left-0 text-center py-4 duration-300`}
-        >
-          <li className="navItemPhone">
+          >
+            <li className="navItemPhone">
             <a href="#" className="navLinkPhone">
               Home
             </a>
@@ -106,9 +87,11 @@ const Header = () => {
                 Register
               </a>
             </button>
-          </div>
+          </div>   
         </ul>
-      </div>
+        </div>
+        
+    
       <div className="max-sm:hidden">
         <ul className="navMenuDesktop flex items-center gap-x-10">
           <li className="navItemDesktop">
