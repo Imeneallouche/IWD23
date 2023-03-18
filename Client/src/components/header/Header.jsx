@@ -2,29 +2,28 @@ import { useState, useEffect } from "react";
 import menu from "../../assets/imgs/menu.png";
 import close from "../../assets/imgs/close.png";
 
-
 const Header = () => {
   const [navToggle, setNavToggle] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
 
-    useEffect(() => {
-      function handleScroll() {
-        if (window.scrollY > 40) {
-          setHasScrolled(true);
-        } else {
-          setHasScrolled(false);
-        }
+  useEffect(() => {
+    function handleScroll() {
+      if (window.scrollY > 40) {
+        setHasScrolled(true);
+      } else {
+        setHasScrolled(false);
       }
+    }
 
-      window.addEventListener("scroll", handleScroll);
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-      };
-    }, []);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <header
       className={`${
-        hasScrolled ? 'bg-blue-400' : ""
+        hasScrolled ? "bg-blue-400" : ""
       } fixed w-full h-[60px] left-0 top-0  flex items-center justify-between bg-transparent px-5 md:px-10 md:py-5 z-10`}
     >
       <div className="logo">
