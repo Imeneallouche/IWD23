@@ -1,30 +1,32 @@
 import { useState, useEffect } from "react";
 import menu from "../../assets/imgs/menu.png";
 import close from "../../assets/imgs/close.png";
-
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [navToggle, setNavToggle] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
 
-    useEffect(() => {
-      function handleScroll() {
-        if (window.scrollY > 40) {
-          setHasScrolled(true);
-        } else {
-          setHasScrolled(false);
-        }
-      }
+ useEffect(() => {
+   function handleScroll() {
+     if (window.scrollY > 40) {
+       setHasScrolled(true);
+     } else {
+       setHasScrolled(false);
+     }
+   }
 
-      window.addEventListener("scroll", handleScroll);
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-      };
-    }, []);
+   window.addEventListener("scroll", handleScroll);
+   return () => {
+     window.removeEventListener("scroll", handleScroll);
+   };
+ }, []);
+
+ 
   return (
     <header
       className={`${
-        hasScrolled ? 'bg-blue-400' : ""
+        hasScrolled ? 'bg-blue-500' : ''
       } fixed w-full h-[60px] left-0 top-0  flex items-center justify-between bg-transparent px-5 md:px-10 md:py-5 z-10`}
     >
       <div className="logo">
@@ -32,7 +34,7 @@ const Header = () => {
           className="text-white font-bold uppercase text-2xl md:ml-[30px]"
           href="#"
         >
-          Logo
+          MindScape
         </a>
       </div>
       <div className="menu md:hidden w-[25px] cursor-pointer">
@@ -113,14 +115,14 @@ const Header = () => {
         </ul>
       </div>
       <div className="Auth flex items-center gap-x-5 max-sm:hidden">
-        <a className="text-white" href="#">
-          Log in
-        </a>
-        <button className="bg-[#5665FB] px-3 py-1 rounded-md md:hover:bg-[#3848f7] md:hover:duration-300">
-          <a className="text-white font-bold" href="#">
+        <Link to="/login">
+          <button className="text-white">Log in </button>
+        </Link>
+        <Link to="/register">
+          <button className="text-white bg-[#5665FB] px-3 py-1 rounded-md md:hover:bg-[#3848f7] md:hover:duration-300">
             Register
-          </a>
-        </button>
+          </button>
+        </Link>
       </div>
     </header>
   );

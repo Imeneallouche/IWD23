@@ -29,7 +29,7 @@ const Contact = () => {
         <h2 className="text-2xl py-14 text-[#5A5C81]">CONTACT US </h2>
         <h4 className="text-4xl text-white text-bold">Let us get in touch</h4>
       </div>
-      <div className="w-[90%] md:gap-x-[120px] md:py-16 md:mx-auto">
+      <div className="w-[90%] md:gap-x-[120px] md:py-16 mx-auto">
         <div className="text-center md:text-center md:mx-auto  ">
           <h2 className="text-[#7A86FF] text-2xl  font-bold py-4">
             Send us a message

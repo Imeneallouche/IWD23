@@ -24,7 +24,7 @@ const Testimonials = () => {
       <div className="py-10 md:flex md:items-center md:justify-between">
         <div className="flex-1 md:px-[70px]">
           <h2 className="max-sm:text-center text-2xl text-white ">
-            Name a Story
+            MindScape
           </h2>
           <p className="max-sm:text-center py-4 md:text-sm   md:w-[320px] text-white text-lg">
             We’ ve helped millions feel better now it’s your turn to benefit
