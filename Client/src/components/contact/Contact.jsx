@@ -1,10 +1,8 @@
-import location from '../../assets/imgs/location.png'
-import phone from '../../assets/imgs/phone.png'
-import email from '../../assets/imgs/email.png'
+import location from "../../assets/imgs/location.png";
+import phone from "../../assets/imgs/phone.png";
+import email from "../../assets/imgs/email.png";
 import React, { useState } from "react";
-
-
-
+import { api } from "../../utils/api";
 
 const Contact = () => {
   const [name, setName] = useState("");
@@ -13,16 +11,18 @@ const Contact = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const fromData = { name, email, feedback };
+
+    api
+      .post("/login", fromData)
+      .then((response) => {
+        console.log("sent");
+      })
+      .catch((err) => console.log("error"));
+
     const formData = { name, email, feedback };
-    fetch("/Server/Backend/ContactUs/admin.py", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error(error));
   };
+
   return (
     <section className="bg-[#202135]">
       <div className="text-center">
@@ -68,7 +68,10 @@ const Contact = () => {
                 onChange={(event) => setFeedback(event.target.value)}
                 required
               ></textarea>
-              <button className="bg-[#7A86FF] my-4 px-4 py-2 md:px-9 rounded-md font-bold" type='submit'>
+              <button
+                className="bg-[#7A86FF] my-4 px-4 py-2 md:px-9 rounded-md font-bold"
+                type="submit"
+              >
                 Send
               </button>
             </form>
@@ -77,6 +80,6 @@ const Contact = () => {
       </div>
     </section>
   );
-}
+};
 
-export default Contact
+export default Contact;

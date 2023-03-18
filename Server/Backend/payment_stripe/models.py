@@ -1,160 +1,43 @@
 from django.db import models
-
-from django.utils import timezone
-from django.urls import reverse
-from django.db import models
-
-from chargily_epay_django.payment_manager import payment_manager
-from chargily_epay_django.utils import get_webhook_url
-
-from chargily_lib.utils import extract_redirect_url
-from chargily_lib.invoice import new_invoice
-
-from chargily_lib.constant import (
-
-    PAYMENT_FAILED,
-    PAYMENT_CANCELED,
-    PAYMENT_PAID,
-    PAYMENT_EXPIRED,
-    PAYMENT_IN_PROGRESS,
-
-    # ---
-
-    EDAHABIA,
-    CIB,
-)
+from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 
 
-class FakePaymentMixin:
-    fake_payment_url = "fake-payment"
+# STRIPE MODEL
+class StripeModel(models.Model):
+    email = models.EmailField(null=True, blank=True)
+    name_on_card = models.CharField(max_length=200, null=True, blank=True)
+    customer_id = models.CharField(max_length=200, blank=True, null=True)
+    card_number = models.CharField(
+        max_length=16, unique=True, null=True, blank=True)
+    exp_month = models.CharField(max_length=2, validators=[
+                                 RegexValidator(r'^\d{0,9}$')], null=True, blank=True)
+    exp_year = models.CharField(max_length=4, validators=[
+                                RegexValidator(r'^\d{0,9}$')], null=True, blank=True)
+    card_id = models.TextField(max_length=100, null=True, blank=True)
+    user = models.ForeignKey(User, related_name="stripemodel",
+                             on_delete=models.CASCADE, null=True, blank=True)
+    address_city = models.CharField(max_length=120, null=True, blank=True)
+    address_country = models.CharField(max_length=120, null=True, blank=True)
+    address_state = models.CharField(max_length=120, null=True, blank=True)
+    address_zip = models.CharField(max_length=6, validators=[
+                                   RegexValidator(r'^\d{0,9}$')], null=True, blank=True)
 
-    def make_payment(self):
-        redirect_url = reverse(
-            self.fake_payment_url, kwargs={
-                "invoice_number": self.invoice_number}
-        )
-        return redirect_url
-
-
-class AbstractPayment(models.Model):
-    back_url = None
-    webhook_url = None
-
-    PAYMENT_MODE = {
-        (CIB, "CIB"),
-        (EDAHABIA, "EDAHABIA"),
-    }
-
-    PAYMENT_STATUS = {
-        (PAYMENT_EXPIRED, "EXPIRED"),
-        (PAYMENT_IN_PROGRESS, "IN PROGRESS"),
-        (PAYMENT_PAID, "PAID"),
-        (PAYMENT_FAILED, "FAILED"),
-        (PAYMENT_CANCELED, "CANCELED"),
-    }
-
-    invoice_number = models.BigAutoField(primary_key=True)  # PRIMARY KEY
-
-    amount = models.DecimalField(decimal_places=2, max_digits=1000000)
-
-    comment = models.TextField()
-
-    discount = models.FloatField(max_length=2, default=0, blank=True)
-
-    mode = models.CharField(
-        max_length=25, choices=PAYMENT_MODE, default=EDAHABIA)
-
-    status = models.CharField(
-        max_length=25, default=PAYMENT_IN_PROGRESS, choices=PAYMENT_STATUS
-    )
-
-    # Metadata
-    create_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
-    payment_date = models.DateTimeField(blank=True, null=True)
-
-    class Meta:
-        abstract = True
-
-    def get_payment_data(self) -> dict:
-
-        request_data = new_invoice()
-
-        request_data["invoice_number"] = self.invoice_number
-        request_data["client"] = self.get_client()
-        request_data["amount"] = float(self.amount)
-        request_data["comment"] = self.comment
-        request_data["discount"] = self.discount
-        request_data["mode"] = self.mode
-        request_data["client_email"] = self.get_client_email()
-        request_data["webhook_url"] = self.generate_webhook_url()
-        request_data["back_url"] = self.generate_back_url()
-        return request_data
-
-    def generate_webhook_url(self):
-        confirmaion_url = str(reverse(self.webhook_url))
-        return get_webhook_url(confirmaion_url)
-
-    def generate_back_url(self):
-        confirmaion_url = str(reverse(self.back_url))
-        return get_webhook_url(confirmaion_url)
-
-    def get_client_email(self):
-        raise NotImplementedError()
-
-    def get_client(self):
-        raise NotImplementedError()
-
-    def make_payment(self):
-        request_data = self.get_payment_data()
-        response = payment_manager.make_payment(request_data)
-        if response.status_code == 201:
-            return extract_redirect_url(response.content)
-        else:
-            self.payment_failed()
-            return None
-
-    def payment_confirm(self, **kwargs):
-        self.status = PAYMENT_PAID
-        self.payment_date = timezone.now()
-        self.save()
-
-    def payment_expired(self, **kwargs):
-        self.status = PAYMENT_EXPIRED
-        self.save()
-
-    def payment_failed(self, **kwargs):
-        self.status = PAYMENT_FAILED
-        self.save()
-
-    def payment_canceled(self, **kwargs):
-        self.status = PAYMENT_CANCELED
-        self.save()
+    def __str__(self):
+        return self.email
 
 
-class AuthPayment(AbstractPayment):
-    client = models.ForeignKey("auth.User", on_delete=models.CASCADE)
-    client_email = models.EmailField()
-
-    def get_client_email(self):
-        return self.client_email
-
-    def get_client(self):
-        return self.client.username
-
-    class Meta:
-        abstract = True
-
-
-class AnonymPayment(AbstractPayment):
-    client = models.CharField(max_length=255)
-    client_email = models.EmailField()
-
-    def get_client_email(self):
-        return self.client_email
-
-    def get_client(self):
-        return self.client
-
-    class Meta:
-        abstract = True
+class OrderModel(models.Model):
+    name = models.CharField(max_length=120)
+    ordered_item = models.CharField(
+        max_length=200, null=True, blank=True, default="Not Set")
+    card_number = models.CharField(max_length=16, null=True, blank=True)
+    address = models.CharField(max_length=300, null=True, blank=True)
+    paid_status = models.BooleanField(default=False)
+    paid_at = models.DateTimeField(auto_now_add=False, null=True, blank=True)
+    total_price = models.DecimalField(
+        max_digits=8, decimal_places=2, null=True, blank=True)
+    is_delivered = models.BooleanField(default=False)
+    delivered_at = models.CharField(max_length=200, null=True, blank=True)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=True, blank=True)

@@ -1,7 +1,7 @@
 const Hero = () => {
 
   return (
-    <section className="heroBg heroBgDesktop">
+    <section className="heroBg heroBgDesktop overflow-hidden h-screen">
       <div className="w-[90%] md:w-[87%] py-[130px] md:py-[210px] max-sm:text-center text-white mx-auto">
         <div className="md:w-[44%] md:mx-auto">
           <h1 className="text-2xl font-bold md:text-4xl">
