@@ -2,16 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.heroBg {
+    background-image: url(./assets//imgs/bgPhone.svg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+.heroBgDesktop {
+    background-image: url(./assets//imgs/bgDesktop.svg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
+
+.navItemPhone {
+    list-style: none;
+    margin-top: 10px;
+}
+
+.navLinkPhone {
+    font-size: 25px;
+    color: black;
+}
+
+.navLinkDesktop {
+    font-size: 15px;
+    color: white;
+}
+
+
+.round {
+    border-radius: 30% 70% 70% 30% / 30% 43% 57% 70%;
+}
+
+
+.curl {
+    background-image: url(assets/imgs/Ellipse.png);
+    background-repeat: no-repeat;
+}
+
