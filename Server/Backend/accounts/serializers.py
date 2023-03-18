@@ -9,9 +9,14 @@ class UserSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class PatientSerializer(serializers.ModelSerializer):
+    role = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Patient
-        fields = ["id","username","email"]
+        fields = ["id","username","email", "role"]
+    
+    def get_role(self, obj):
+        return 'patient'
 
 class PatientRegisterSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,11 +34,16 @@ class PatientRegisterSerializer(serializers.ModelSerializer):
 
 
 
-class TherapistSerializer(serializers.ModelSerializer):
+class TherapistSerializer(serializers.ModelSerializer):        
+    role = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Therapist
-        fields = ["id","username", "email"]
+        fields = ["id","username", "email", "role"]
         # fields = "__all__"
+
+    def get_role(self, obj):
+        return 'therapist'
 
 class TherapistRegisterSerializer(serializers.ModelSerializer):
     class Meta:

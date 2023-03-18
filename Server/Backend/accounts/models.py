@@ -18,6 +18,10 @@ class Patient(models.Model):
         },
     )
     
+    @property
+    def role(self):
+        return 'patient'
+
     def __str__(self) -> str:
         return self.username
     
@@ -43,13 +47,19 @@ class Therapist(models.Model):
         },
     )
     
+    @property
+    def role(self):
+        return 'therapist'
+    
     def __str__(self) -> str:
         return self.username
+    
     
     def save(self, *args, **kwargs):
        if self.username == None:
            self.username = self.user.username
        super().save(*args, **kwargs) # Call the real save() method
+
 
 
 

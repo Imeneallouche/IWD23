@@ -19,6 +19,8 @@ const Contact = () => {
         console.log("sent");
       })
       .catch((err) => console.log("error"));
+
+    const formData = { name, email, feedback };
   };
 
   return (
@@ -39,25 +41,38 @@ const Contact = () => {
             nobis?
           </p>
           <div className="text-center  py-7 ">
-            <form className="">
+            <form className="" onSubmit={handleSubmit}>
               <input
                 className="px-7 md:w-[400px] md:mx-auto py-2 rounded-md md:block"
                 type="text"
                 placeholder="Enter Your Name"
+                id="name"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+                required
               />
               <input
                 className="my-5 px-7 md:w-[400px] md:mx-auto py-2 rounded-md md:block"
                 type="email"
                 placeholder="Enter Your Email"
+                id="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
               />
               <textarea
                 className="w-[240px] md:w-[400px] h-[90px] md:h-[150px] px-7 py-2 block mx-auto"
                 placeholder="Enter Your Message"
+                id="feedback"
+                value={feedback}
+                onChange={(event) => setFeedback(event.target.value)}
+                required
               ></textarea>
-              <button className="bg-[#7A86FF] my-4 px-4 py-2 md:px-9 rounded-md font-bold">
-                <a className="text-2xl  text-white" href="#">
-                  Send
-                </a>
+              <button
+                className="bg-[#7A86FF] my-4 px-4 py-2 md:px-9 rounded-md font-bold"
+                type="submit"
+              >
+                Send
               </button>
             </form>
           </div>
